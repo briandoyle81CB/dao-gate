@@ -8,7 +8,7 @@ import { useReadContract } from "wagmi";
 import { useQueryClient } from "@tanstack/react-query";
 
 import abi from "./constants/abi.json";
-const contractAddress = "0x354ef633Fb3ba2c427F18fC39Fcf96A31d0fD577";
+const contractAddress = "0x038EE341181E1090159eAB1F4bA2C28F4B50330D";
 
 export default function Page() {
   const [scannedAddress, setScannedAddress] = useState<string | null>(null);
@@ -39,10 +39,11 @@ export default function Page() {
 
   useEffect(() => {
     console.log("Refreshing balance");
-    queryClient.invalidateQueries({ queryKey: balanceQueryKey });
+    if (scannedAddress) {
+      queryClient.invalidateQueries({ queryKey: balanceQueryKey });
+    }
   }, [scannedAddress]);
 
-  
   async function startScanning() {
     setScanning(true);
     setScannedAddress(null);
