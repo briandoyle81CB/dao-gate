@@ -1,4 +1,4 @@
-[
+export const abi = [
   {
     "constant": true,
     "inputs": [
@@ -18,4 +18,4 @@
     "stateMutability": "view",
     "type": "function"
   }
-]
+] as const

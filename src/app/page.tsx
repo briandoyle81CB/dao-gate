@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
 
 import { useReadContract } from "wagmi";
 import { useQueryClient } from "@tanstack/react-query";
+import { abi } from "./constants/abi";
 
-import abi from "./constants/abi.json";
 const contractAddress = "0x038EE341181E1090159eAB1F4bA2C28F4B50330D";
 
 export default function Page() {
-  const [scannedAddress, setScannedAddress] = useState<string | null>(null);
+  const [scannedAddress, setScannedAddress] = useState<`0x${string}` | null>(null);
   const [authorized, setAuthorized] = useState(false);
   const [scanning, setScanning] = useState(false);
 
@@ -23,14 +23,14 @@ export default function Page() {
     isPending: balanceIsPending,
     queryKey: balanceQueryKey,
   } = useReadContract({
-    address: contractAddress as `0x${string}`,
+    address: contractAddress,
     abi,
     functionName: "balanceOf",
-    args: [scannedAddress],
+    args: scannedAddress ? [scannedAddress] : undefined,
   });
 
   useEffect(() => {
-    if (balanceData) {
+    if (balanceData !== undefined) {
       const balance = balanceData as bigint
       console.log("Balance: ", balance);
       setAuthorized(balance > 0n);
@@ -86,7 +86,7 @@ export default function Page() {
             }
 
             // handle the result
-            setScannedAddress(scannedAddress);
+            setScannedAddress(scannedAddress as `0x${string}`);
             setScanning(false);
             html5QrCode.stop();
           },
